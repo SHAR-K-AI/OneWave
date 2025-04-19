@@ -1,6 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 
+/**
+ *
+ * @constructor
+ */
 export default function NotFound() {
     return (
         <div className="flex flex-col items-center justify-center mt-6 p-4 bg-gray-100 text-center">

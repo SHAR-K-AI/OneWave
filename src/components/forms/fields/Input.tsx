@@ -15,18 +15,20 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     controlFieldClassName?: string;
 }
 
-const Input: React.FC<InputProps> = ({
-                                         name,
-                                         label,
-                                         labelNote,
-                                         errorClassName,
-                                         labelClassName,
-                                         groupClassName,
-                                         errors = {},
-                                         controlClassName,
-                                         controlFieldClassName = 'w-full',
-                                         ...rest
-                                     }) => {
+const Input: React.FC<InputProps> = (
+    {
+        name,
+        label,
+        labelNote,
+        errorClassName,
+        labelClassName,
+        groupClassName,
+        errors = {},
+        controlClassName,
+        controlFieldClassName = 'w-full',
+        ...rest
+    }
+) => {
     const hasError = Boolean(errors[name]);
 
     return (
@@ -36,7 +38,7 @@ const Input: React.FC<InputProps> = ({
                     htmlFor={name}
                     className={classNames(
                         labelClassName,
-                        { 'text-red-500': hasError }
+                        {'text-red-500': hasError}
                     )}
                 >
                     {label}

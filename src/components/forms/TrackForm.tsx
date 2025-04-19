@@ -1,9 +1,9 @@
 'use client';
 
-import { Controller, useForm } from 'react-hook-form';
+import {useForm} from 'react-hook-form';
+import {getGenres} from "@/lib/client/apiGenres";
+
 import FormControl from '@/components/forms/FormControl';
-import { getGenres } from "@/lib/client/apiGenres";
-import BackToTracksButton from "@/components/buttons/BackToTracksButton";
 
 export type TrackFormData = {
     title: string;
@@ -19,22 +19,33 @@ type Props = {
     loading?: boolean;
     error?: string | null;
     buttonText?: string;
-    setCoverImage: (url: string) => void;  // Проп для встановлення зображення обкладинки
+    setCoverImage: (url: string) => void;
 };
 
-export default function TrackForm({
-                                      onSubmit,
-                                      defaultValues = {},
-                                      loading = false,
-                                      error,
-                                      buttonText = "Submit",
-                                      setCoverImage,  // отримаємо функцію для встановлення зображення
-                                  }: Props) {
+/**
+ *
+ * @param onSubmit
+ * @param defaultValues
+ * @param loading
+ * @param error
+ * @param buttonText
+ * @param setCoverImage
+ * @constructor
+ */
+export default function TrackForm(
+    {
+        onSubmit,
+        defaultValues = {},
+        loading = false,
+        error,
+        buttonText = "Submit",
+        setCoverImage,
+    }: Props
+) {
     const {
-        register,
-        handleSubmit,
         control,
-        formState: { errors },
+        handleSubmit,
+        formState: {errors},
     } = useForm<TrackFormData>({
         defaultValues: {
             title: defaultValues.title || '',
@@ -45,8 +56,9 @@ export default function TrackForm({
         },
     });
 
+    console.log(defaultValues.genres, "defaultValues.genres")
+
     const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value, "sdfsfsd")
         setCoverImage(e.target.value);
     };
 
@@ -91,7 +103,7 @@ export default function TrackForm({
                 controlClassName="w-full text-gray-700"
             />
             <FormControl
-                name="genres[]"
+                name="genres"
                 errors={errors}
                 control={control}
                 client={getGenres}
@@ -99,29 +111,32 @@ export default function TrackForm({
                 isSearchable={false}
                 controlType="async-select"
                 placeholder="e.g. rock, pop"
-                label="Genres (comma-separated)"
+                label="Genres"
                 labelClassName="text-sm font-medium text-gray-700"
                 getData={(data: string[]) => {
                     return data.map((item: string) => ({
-                        value: item,
+                        id: item,
                         name: item,
                     }));
                 }}
             />
-            <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">Cover Image</label>
-                <input
-                    {...register('coverImage')}
-                    onChange={handleCoverImageChange}
-                    className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter cover image URL"
-                />
-            </div>
+            <FormControl
+                name="coverImage"
+                label="Cover Image"
+                errors={errors}
+                control={control}
+                controlType="input"
+                groupClassName="space-y-1"
+                onChange={handleCoverImageChange}
+                placeholder="Enter cover image URL"
+                controlClassName="w-full text-gray-700"
+                labelClassName="text-sm font-medium text-gray-700"
+                controlFieldClassName="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
 
             {error && <p className="text-red-600 text-center">{error}</p>}
 
             <div className="flex justify-center">
-                <BackToTracksButton />
                 <button
                     type="submit"
                     disabled={loading}

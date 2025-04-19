@@ -1,18 +1,23 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, {useRef} from 'react';
 
 type Props = {
     onFileSelect: (file: File) => void;
 };
 
-const UploadComponent = ({ onFileSelect }: Props) => {
+/**
+ *
+ * @param onFileSelect
+ * @constructor
+ */
+const UploadComponent = ({onFileSelect}: Props) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            onFileSelect(file); // Тільки зберігаємо, не відправляємо
+            onFileSelect(file);
         }
     };
 

@@ -12,6 +12,10 @@ import {
     setSearch
 } from '@/lib/store/slices/filtersSlice';
 
+/**
+ *
+ * @constructor
+ */
 const Filters = () => {
     const dispatch = useDispatch();
     const filters = useSelector((state: RootState) => state.filters);

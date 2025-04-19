@@ -14,7 +14,7 @@ const initialState: FiltersState = {
     page: 1,
     limit: 5,
     sortBy: 'title',
-    order: 'asc',
+    order: 'desc',
     search: '',
     genre: '',
     artist: '',

@@ -4,8 +4,8 @@ import {getTrackById} from '@/lib/client/apiTracks';
 import {getAudioFileUrl} from "@/helpers/audio";
 
 import AppImage from "@/components/AppImage";
-import DeleteTrackButton from "@/components/buttons/DeleteTrackButton";
 import EditTrackButton from "@/components/buttons/EditTrackButton";
+import DeleteTrackButton from "@/components/buttons/DeleteTrackButton";
 import BackToTracksButton from "@/components/buttons/BackToTracksButton";
 
 /**
@@ -18,8 +18,6 @@ async function TrackPage({params}: { params: { slug: string } }) {
         const response = await getTrackById(params.slug);
         const track = response.data;
 
-        console.log(track, "track")
-
         if (!track) {
             notFound();
         }
@@ -31,13 +29,14 @@ async function TrackPage({params}: { params: { slug: string } }) {
                     <BackToTracksButton />
                 </div>
                 <div className="absolute top-4 right-4 flex space-x-3">
-                    <EditTrackButton slug={params.slug} />
-                    <DeleteTrackButton id={track.id}/>
+                    <EditTrackButton slug={params.slug} openInModal={false} className="rounded-full" />
+                    <DeleteTrackButton trackId={track.id} className="rounded-full"/>
                 </div>
 
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-extrabold text-gray-900 animate-slideInFromTop">{track.title}</h1>
-                    <p className="text-lg text-gray-600 mt-2 animate-slideInFromTop">{track.artist}</p>
+                    <h2 className="text-lg text-gray-600 mt-2 animate-slideInFromTop">{track.artist}</h2>
+                    <h3 className="text-lg text-gray-600 mt-2 animate-slideInFromTop">{track.album}</h3>
                 </div>
 
                 <div className="mb-8 text-center">

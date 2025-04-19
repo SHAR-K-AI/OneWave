@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import AsyncSelectBase from 'react-select/async';
+import React from 'react';
 import classNames from 'classnames';
-import { AxiosResponse } from 'axios';
+import {AxiosResponse} from 'axios';
+import AsyncSelectBase from 'react-select/async';
 
 interface Option {
     id: string;
@@ -17,6 +17,7 @@ interface AsyncSelectFieldProps {
     placeholder?: string;
     isMultiple?: boolean;
     defaultValue?: string | string[];
+    value?: string | string[];
     getData?: (data: any) => Option[];
     onChange?: (value: Option | Option[] | null) => void;
     errors?: Record<string, any>;
@@ -26,43 +27,23 @@ interface AsyncSelectFieldProps {
     errorClassName?: string;
 }
 
-const AsyncSelect = ({
-                         client,
-                         name,
-                         label,
-                         placeholder = '',
-                         isMultiple = false,
-                         defaultValue,
-                         getData = (data) => data.map((item: any) => ({ id: item.id, name: item.name })),
-                         onChange,
-                         errors = {},
-                         controlClassName,
-                         labelClassName,
-                         groupClassName,
-                         errorClassName,
-                     }: AsyncSelectFieldProps) => {
-    const [initialOptions, setInitialOptions] = useState<Option[]>([]);
-    const [value, setValue] = useState<Option | Option[] | null>(null);
-
-    // Fetch initial options once
-    useEffect(() => {
-        client().then((response) => {
-            const loaded = getData(response.data);
-            setInitialOptions(loaded);
-
-            // Set default value(s) if provided
-            if (defaultValue) {
-                if (Array.isArray(defaultValue)) {
-                    const matchedValues = loaded.filter((opt) => defaultValue.includes(opt.id));
-                    setValue(matchedValues);
-                } else {
-                    const found = loaded.find((opt) => opt.id === defaultValue);
-                    if (found) setValue(found);
-                }
-            }
-        });
-    }, [client, defaultValue, getData]);
-
+const AsyncSelect = (
+    {
+        client,
+        name,
+        label,
+        placeholder = '',
+        isMultiple = false,
+        onChange,
+        errors = {},
+        value,
+        controlClassName,
+        labelClassName,
+        groupClassName,
+        errorClassName,
+        getData = (data) => data.map((item: any) => ({id: item.id, name: item.name})),
+    }: AsyncSelectFieldProps
+) => {
     const loadOptions = async (inputValue: string): Promise<Option[]> => {
         const response = await client();
         const allOptions = getData(response.data);
@@ -74,27 +55,24 @@ const AsyncSelect = ({
     };
 
     const onChangeWrapper = (selected: any) => {
-        setValue(selected);
         onChange?.(selected);
     };
 
     return (
         <div className={classNames(groupClassName)}>
             {label && <label className={classNames(labelClassName)}>{label}</label>}
-
             <AsyncSelectBase
+                name={name}
                 cacheOptions
-                isClearable
-                isMulti={isMultiple}
-                defaultOptions={initialOptions}
                 value={value}
+                defaultOptions
+                isMulti={isMultiple}
                 loadOptions={loadOptions}
-                getOptionLabel={(e) => e.name}
-                getOptionValue={(e) => e.id}
                 placeholder={placeholder}
                 onChange={onChangeWrapper}
+                getOptionValue={(e) => e.id}
+                getOptionLabel={(e) => e.name}
                 className={classNames(controlClassName)}
-                name={name}
             />
 
             {errors[name] && (

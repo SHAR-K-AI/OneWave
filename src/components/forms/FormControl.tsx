@@ -25,6 +25,17 @@ interface FormControlProps<T extends FieldValues = FieldValues> {
     [key: string]: unknown;
 }
 
+/**
+ *
+ * @param name
+ * @param control
+ * @param onChange
+ * @param rules
+ * @param controlType
+ * @param required
+ * @param rest
+ * @constructor
+ */
 export default function FormControl<T extends FieldValues = FieldValues>(
     {
         name,

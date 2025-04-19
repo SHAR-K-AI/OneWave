@@ -1,15 +1,19 @@
 'use client';
 
 import classNames from 'classnames';
-import {RootState} from '@/lib/store';
-import {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {pause, play, setTrack} from '@/lib/store/slices/playerSlice';
-import {PlayIcon, PauseIcon, XMarkIcon, EyeIcon, EyeSlashIcon} from '@heroicons/react/20/solid';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function AudioPlayer({fixed = true}: { fixed?: boolean }) {
+import SharkDanceImage from "@/components/widgets/SharkDanceImage";
+
+import { RootState } from '@/lib/store';
+import { pause, play, setTrack } from '@/lib/store/slices/playerSlice';
+
+import { PlayIcon, PauseIcon, XMarkIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/20/solid';
+
+export default function AudioPlayer({ fixed = true }: { fixed?: boolean }) {
     const dispatch = useDispatch();
-    const {currentTrack, playing} = useSelector((state: RootState) => state.player);
+    const { currentTrack, playing } = useSelector((state: RootState) => state.player);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [audioEl, setAudioEl] = useState<HTMLAudioElement | null>(null);
@@ -45,7 +49,6 @@ export default function AudioPlayer({fixed = true}: { fixed?: boolean }) {
         canvas.width = window.innerWidth * 0.8;
         canvas.height = 100;
 
-        // Draw animated frequency bars
         const draw = () => {
             animationRef.current = requestAnimationFrame(draw);
             analyser.getByteFrequencyData(dataArray);
@@ -65,6 +68,11 @@ export default function AudioPlayer({fixed = true}: { fixed?: boolean }) {
         };
 
         draw();
+
+        audio.addEventListener('ended', () => {
+            audio.currentTime = 0;
+            audio.play();
+        });
 
         if (playing) {
             audio.play();
@@ -89,34 +97,38 @@ export default function AudioPlayer({fixed = true}: { fixed?: boolean }) {
         <>
             <div
                 className={classNames(
-                    {"fixed bottom-0 left-0 right-0 z-50": fixed},
-                    "bg-white",
-                    {invisible: !isPlayerVisible}
+                    { "fixed bottom-0 left-0 right-0 z-50": fixed },
+                    "bg-white w-full px-4 inset-shadow-sm inset-shadow-indigo-500/50",
+                    { invisible: !isPlayerVisible }
                 )}
             >
-                <div className={classNames({"px-24": fixed}, "py-4 px-24 flex items-center justify-between")}>
-                    <canvas ref={canvasRef} className="w-full h-24 bg-white"/>
-                    <div className="flex items-center space-x-4">
+                <div className={classNames("py-4 px-4 md:px-8 lg:px-24 flex items-center justify-between max-w-full")}>
+                    <div className="w-full h-24 bg-white relative">
+                        <canvas ref={canvasRef} className="w-full h-24 bg-white px-4" />
+                        <SharkDanceImage />
+                    </div>
+
+                    <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 space-x-1 md:space-x-4">
                         <button
                             onClick={() => dispatch(playing ? pause() : play())}
-                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                            className="md:px-4 md:py-2 px-1 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition sm:w-10 sm:h-10 md:w-12 md:h-12 flex justify-center items-center"
                         >
-                            {playing ? <PauseIcon className="w-6 h-6"/> : <PlayIcon className="w-6 h-6"/>}
+                            {playing ? <PauseIcon className="md:w-6 md:h-6 w-3 h-3" /> : <PlayIcon className="md:w-6 md:h-6 w-3 h-3" />}
                         </button>
                         <button
                             onClick={() => dispatch(setTrack(null))}
-                            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                            className="md:px-4 md:py-2 px-1 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition sm:w-10 sm:h-10 md:w-12 md:h-12 flex justify-center items-center"
                         >
-                            <XMarkIcon className="w-6 h-6"/>
+                            <XMarkIcon className="md:w-6 md:h-6 w-3 h-3" />
                         </button>
                     </div>
                 </div>
             </div>
             <button
                 onClick={() => setPlayerVisible(!isPlayerVisible)}
-                className="fixed bottom-20 left-5 z-50 px-2 py-2 bg-gray-800 text-white rounded-full hover:bg-gray-600"
+                className="fixed bottom-20 left-5 z-50 px-2 py-2 bg-gray-800 text-white rounded-full hover:bg-gray-600 sm:w-8 sm:h-8 md:w-10 md:h-10"
             >
-                {isPlayerVisible ? <EyeSlashIcon className="w-5 h-5"/> : <EyeIcon className="w-5 h-5"/>}
+                {isPlayerVisible ? <EyeSlashIcon className="w-5 h-5 sm:w-4 sm:h-4" /> : <EyeIcon className="w-5 h-5 sm:w-4 sm:h-4" />}
             </button>
         </>
     );

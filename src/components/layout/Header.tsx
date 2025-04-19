@@ -1,6 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 
+/**
+ *
+ * @constructor
+ */
 const Header: React.FC = () => {
     return (
         <div className="relative">

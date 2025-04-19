@@ -1,7 +1,7 @@
 "use client"
 
 import Image from 'next/image'
-import { useState } from 'react'
+import {useState} from 'react'
 
 type Props = {
     src?: string | null
@@ -13,13 +13,15 @@ type Props = {
 
 const defaultImage = '/images/noimage.gif'
 
-export default function AppImage({
-                                     src,
-                                     alt,
-                                     width = 200,
-                                     height = 200,
-                                     className = '',
-                                 }: Props) {
+export default function AppImage(
+    {
+        src,
+        alt,
+        width = 200,
+        height = 200,
+        className = '',
+    }: Props
+) {
     const [imgSrc, setImgSrc] = useState(src || defaultImage)
 
     return (

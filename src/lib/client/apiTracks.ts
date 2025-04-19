@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
-import { toast } from 'react-hot-toast';
+import {AxiosResponse} from 'axios';
+import {toast} from 'react-hot-toast';
 import apiClient from '@/lib/client/apiClient';
 
 export interface Track {
@@ -23,9 +23,19 @@ interface GetTracksParams {
     artist: string;
 }
 
-export const getTracks = async ({
-                                    page, limit, sortBy, order, search, genre, artist
-                                }: GetTracksParams) => {
+/**
+ *
+ * @param page
+ * @param limit
+ * @param sortBy
+ * @param order
+ * @param search
+ * @param genre
+ * @param artist
+ */
+export const getTracks = async (
+    {page, limit, sortBy, order, search, genre, artist}: GetTracksParams
+) => {
     try {
         const queryParams = new URLSearchParams();
 
@@ -46,6 +56,10 @@ export const getTracks = async ({
     }
 };
 
+/**
+ *
+ * @param slug
+ */
 export const getTrackBySlug = async (slug: string): Promise<AxiosResponse<Track>> => {
     try {
         const response = await apiClient.get(`/tracks/${slug}`);
@@ -56,6 +70,10 @@ export const getTrackBySlug = async (slug: string): Promise<AxiosResponse<Track>
     }
 };
 
+/**
+ *
+ * @param id
+ */
 export const getTrackById = async (id: string): Promise<AxiosResponse<Track>> => {
     try {
         const response = await apiClient.get(`/tracks/${id}`);
@@ -66,6 +84,10 @@ export const getTrackById = async (id: string): Promise<AxiosResponse<Track>> =>
     }
 };
 
+/**
+ *
+ * @param data
+ */
 export const createTrack = async (data: TrackData): Promise<AxiosResponse<Track>> => {
     try {
         const response = await apiClient.post('/tracks', data);
@@ -77,9 +99,14 @@ export const createTrack = async (data: TrackData): Promise<AxiosResponse<Track>
     }
 };
 
-export const updateTrack = async (id: string, data: TrackData): Promise<AxiosResponse<Track>> => {
+/**
+ *
+ * @param trackId
+ * @param data
+ */
+export const updateTrack = async (trackId: string, data: TrackData): Promise<AxiosResponse<Track>> => {
     try {
-        const response = await apiClient.put(`/tracks/${id}`, data);
+        const response = await apiClient.put(`/tracks/${trackId}`, data);
         toast.success('Track updated!');
         return response;
     } catch (error: any) {
@@ -88,6 +115,10 @@ export const updateTrack = async (id: string, data: TrackData): Promise<AxiosRes
     }
 };
 
+/**
+ *
+ * @param id
+ */
 export const deleteTrack = async (id: number): Promise<AxiosResponse<void>> => {
     try {
         const response = await apiClient.delete(`/tracks/${id}`);
@@ -99,18 +130,37 @@ export const deleteTrack = async (id: number): Promise<AxiosResponse<void>> => {
     }
 };
 
-export const uploadTrackFile = async (id: number, file: File): Promise<AxiosResponse> => {
-    console.log(id, "id")
+/**
+ *
+ * @param trackId
+ * @param file
+ */
+export const uploadTrackFile = async (trackId: string, file: File): Promise<AxiosResponse> => {
     try {
         const formData = new FormData();
         formData.append('file', file);
-        const response = await apiClient.post(`/tracks/${id}/upload`, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
+        const response = await apiClient.post(`/tracks/${trackId}/upload`, formData, {
+            headers: {'Content-Type': 'multipart/form-data'},
         });
         toast.success('File uploaded!');
         return response;
     } catch (error: any) {
         toast.error('Failed to upload file.');
+        throw error;
+    }
+};
+
+/**
+ *
+ * @param ids
+ */
+export const deleteMultipleTracks = async (ids: string[]): Promise<AxiosResponse<void>> => {
+    try {
+        const response = await apiClient.post('/tracks/delete', {ids});
+        toast.success('Tracks deleted successfully!');
+        return response;
+    } catch (error: any) {
+        toast.error('Failed to delete multiple tracks.');
         throw error;
     }
 };
