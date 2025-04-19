@@ -76,7 +76,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className="border-t border-gray-700 py-4 text-center text-sm text-gray-500">
-                &copy; {new Date().getFullYear()} Your Music App. All rights reserved.
+                &copy; {new Date().getFullYear()} Shar(k)AI. Built with ❤️ by Vadym. 🌊 OneWave. All rights reserved.
             </div>
         </footer>
     );

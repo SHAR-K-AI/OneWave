@@ -8,7 +8,9 @@ import {
     FieldValues,
     RegisterOptions,
 } from 'react-hook-form';
+
 import Input from "@/components/forms/fields/Input";
+import AsyncSelect from "@/components/forms/fields/AsyncSelect";
 
 type ControlTypes = 'file' | 'input' | 'select' | 'async-select';
 
@@ -34,12 +36,16 @@ export default function FormControl<T extends FieldValues = FieldValues>(
         ...rest
     }: FormControlProps<T>
 ) {
-    let ControlComponent: React.ComponentType<React.ComponentProps<typeof Input>>;
+    let ControlComponent: React.ComponentType<React.ComponentProps<typeof Input | typeof AsyncSelect>>;
 
     switch (controlType) {
         case 'input':
             ControlComponent = Input;
             break;
+        case 'async-select': {
+            ControlComponent = AsyncSelect;
+            break;
+        }
         default:
             throw new Error(`Unsupported controlType: ${controlType}`);
     }

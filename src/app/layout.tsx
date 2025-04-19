@@ -1,5 +1,6 @@
 import "./globals.css";
 
+import { Toaster } from 'react-hot-toast';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -29,9 +30,10 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
         <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         <Header/>
-        <main className="flex-grow bg-gray-100 py-8">
+        <main className="flex-grow bg-gray-100">
             <ReduxProvider>
                 {children}
+                <Toaster position="top-right" />
                 <AudioPlayer />
             </ReduxProvider>
         </main>

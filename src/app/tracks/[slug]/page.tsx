@@ -1,11 +1,12 @@
-import Link from 'next/link';
 import {notFound} from 'next/navigation';
-
 import {getTrackById} from '@/lib/client/apiTracks';
-import {PencilIcon, ArrowLeftIcon} from '@heroicons/react/20/solid';
+
+import {getAudioFileUrl} from "@/helpers/audio";
 
 import AppImage from "@/components/AppImage";
-import DeleteButton from "@/components/buttons/DeleteButton";
+import DeleteTrackButton from "@/components/buttons/DeleteTrackButton";
+import EditTrackButton from "@/components/buttons/EditTrackButton";
+import BackToTracksButton from "@/components/buttons/BackToTracksButton";
 
 /**
  *
@@ -17,32 +18,21 @@ async function TrackPage({params}: { params: { slug: string } }) {
         const response = await getTrackById(params.slug);
         const track = response.data;
 
+        console.log(track, "track")
+
         if (!track) {
             notFound();
         }
 
         return (
             <div
-                className="track-page bg-white p-8 rounded-xl shadow-2xl max-w-4xl mx-auto animate-fadeIn relative">
+                className="track-page bg-white m-4 p-8 rounded-xl shadow-2xl max-w-4xl mx-auto animate-fadeIn relative">
                 <div className="absolute top-4 left-4 flex items-center space-x-4">
-                    <Link
-                        href="/tracks"
-                        className="flex items-center space-x-2 p-2 bg-gray-300 text-gray-800 rounded-full hover:bg-gray-400 transition duration-300"
-                        aria-label="Back to Tracks"
-                    >
-                        <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                        <span>Back to Tracks</span>
-                    </Link>
+                    <BackToTracksButton />
                 </div>
                 <div className="absolute top-4 right-4 flex space-x-3">
-                    <Link
-                        aria-label="Edit"
-                        href={`/tracks/edit/${params.slug}`} passHref
-                        className="flex items-center space-x-2 p-2 bg-blue-600 rounded-full hover:bg-gray-400 transition duration-300"
-                    >
-                        <PencilIcon className="h-5 w-5"/>
-                    </Link>
-                    <DeleteButton id={track.id}/>
+                    <EditTrackButton slug={params.slug} />
+                    <DeleteTrackButton id={track.id}/>
                 </div>
 
                 <div className="text-center mb-8">
@@ -65,10 +55,11 @@ async function TrackPage({params}: { params: { slug: string } }) {
                     <p className="text-gray-600">{track.genres ? track.genres.join(', ') : 'N/A'}</p>
                 </div>
 
+                {/*<AudioPlayer fixed={false}/>*/}
                 <div className="mb-6 text-center animate-slideInFromBottom">
                     <audio controls
                            className="w-full max-w-lg mx-auto bg-gray-100 rounded-lg transition-all duration-300 hover:bg-gray-200">
-                        <source src={track.audioFile ? track.audioFile : "/api/audio/default"} type="audio/mp3"/>
+                        <source src={track.audioFile ? getAudioFileUrl(track.audioFile) : "/api/audio/default"} type="audio/mp3"/>
                         Your browser does not support the audio element.
                     </audio>
                 </div>

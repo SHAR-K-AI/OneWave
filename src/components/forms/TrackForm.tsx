@@ -2,6 +2,8 @@
 
 import { Controller, useForm } from 'react-hook-form';
 import FormControl from '@/components/forms/FormControl';
+import { getGenres } from "@/lib/client/apiGenres";
+import BackToTracksButton from "@/components/buttons/BackToTracksButton";
 
 export type TrackFormData = {
     title: string;
@@ -17,6 +19,7 @@ type Props = {
     loading?: boolean;
     error?: string | null;
     buttonText?: string;
+    setCoverImage: (url: string) => void;  // Проп для встановлення зображення обкладинки
 };
 
 export default function TrackForm({
@@ -25,6 +28,7 @@ export default function TrackForm({
                                       loading = false,
                                       error,
                                       buttonText = "Submit",
+                                      setCoverImage,  // отримаємо функцію для встановлення зображення
                                   }: Props) {
     const {
         register,
@@ -41,7 +45,10 @@ export default function TrackForm({
         },
     });
 
-    console.log(defaultValues, "defaultValues")
+    const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.value, "sdfsfsd")
+        setCoverImage(e.target.value);
+    };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -83,30 +90,29 @@ export default function TrackForm({
                 labelClassName="text-sm font-medium text-gray-700"
                 controlClassName="w-full text-gray-700"
             />
-
+            <FormControl
+                name="genres[]"
+                errors={errors}
+                control={control}
+                client={getGenres}
+                isMultiple={true}
+                isSearchable={false}
+                controlType="async-select"
+                placeholder="e.g. rock, pop"
+                label="Genres (comma-separated)"
+                labelClassName="text-sm font-medium text-gray-700"
+                getData={(data: string[]) => {
+                    return data.map((item: string) => ({
+                        value: item,
+                        name: item,
+                    }));
+                }}
+            />
             <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">Genres (comma-separated)</label>
-                <Controller
-                    control={control}
-                    name="genres"
-                    render={({ field }) => (
-                        <input
-                            className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
-                            placeholder="e.g. rock, pop"
-                            value={field.value?.join(', ') ?? ''}
-                            onChange={(e) => {
-                                const genresArray = e.target.value.split(',').map((g) => g.trim());
-                                field.onChange(genresArray);
-                            }}
-                        />
-                    )}
-                />
-            </div>
-
-            <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">Cover Image URL</label>
+                <label className="block text-sm font-medium text-gray-700">Cover Image</label>
                 <input
                     {...register('coverImage')}
+                    onChange={handleCoverImageChange}
                     className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter cover image URL"
                 />
@@ -115,10 +121,11 @@ export default function TrackForm({
             {error && <p className="text-red-600 text-center">{error}</p>}
 
             <div className="flex justify-center">
+                <BackToTracksButton />
                 <button
                     type="submit"
                     disabled={loading}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition duration-300 cursor-pointer"
+                    className="bg-blue-600 text-white mx-4 px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition duration-300 cursor-pointer"
                 >
                     {loading ? 'Saving...' : buttonText}
                 </button>

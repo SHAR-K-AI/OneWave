@@ -6,14 +6,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TrashIcon } from '@heroicons/react/20/solid';
 
-const DeleteButton = ({ id }: { id: number }) => {
+const DeleteTrackButton = ({ trackId }: { trackId: number }) => {
     const [isDeleting, setIsDeleting] = useState(false);
     const router = useRouter();
 
     const handleDelete = async () => {
         setIsDeleting(true);
         try {
-            await deleteTrack(id);
+            await deleteTrack(trackId);
             router.push('/tracks');
         } catch (error) {
             console.error('Error deleting track:', error);
@@ -34,4 +34,4 @@ const DeleteButton = ({ id }: { id: number }) => {
     );
 };
 
-export default DeleteButton;
+export default DeleteTrackButton;

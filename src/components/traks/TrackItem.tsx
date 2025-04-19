@@ -2,10 +2,15 @@
 
 import React from 'react';
 import Link from 'next/link';
+
 import { useDispatch } from 'react-redux';
 import AppImage from "@/components/AppImage";
+import {getAudioFileUrl} from "@/helpers/audio";
+
 import { SpeakerWaveIcon } from '@heroicons/react/20/solid';
 import { setTrack, play } from '@/lib/store/slices/playerSlice';
+import EditTrackButton from "@/components/buttons/EditTrackButton";
+import DeleteTrackButton from "@/components/buttons/DeleteTrackButton";
 
 interface Track {
     id: string;
@@ -23,7 +28,7 @@ const TrackItem: React.FC<{ track: Track }> = ({ track }) => {
     const dispatch = useDispatch();
 
     const handlePlay = () => {
-        dispatch(setTrack(track.audioFile ? track.audioFile : "/api/audio/default"));
+        dispatch(setTrack(track.audioFile ? getAudioFileUrl(track.audioFile) : "/api/audio/default"));
         dispatch(play());
     };
 
@@ -64,6 +69,8 @@ const TrackItem: React.FC<{ track: Track }> = ({ track }) => {
                 >
                     <SpeakerWaveIcon className="h-5 w-5" />
                 </button>
+                <EditTrackButton slug={track.slug} />
+                <DeleteTrackButton trackId={track.id}/>
             </div>
         </div>
     );

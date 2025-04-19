@@ -30,6 +30,8 @@ export default function TracksPage() {
                 <p className="text-center">Loading tracks...</p>
             ) : error ? (
                 <p className="text-center text-red-500">{error}</p>
+            ) : tracks.length === 0 ? (
+                <p className="text-center text-gray-500">No results found</p>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                     {tracks.map((track) => (
@@ -38,7 +40,7 @@ export default function TracksPage() {
                 </div>
             )}
 
-            {meta?.totalPages && (
+            {!!meta?.totalPages && (
                 <Pagination
                     currentPage={filters.page}
                     totalPages={meta.totalPages}
