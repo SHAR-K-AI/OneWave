@@ -1,5 +1,4 @@
-import {deleteMultipleTracks, getTracks} from '@/lib/client/apiTracks';
-import {FiltersState} from '@/lib/store/slices/filtersSlice';
+import {deleteMultipleTracks} from '@/lib/client/apiTracks';
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 
 export interface Track {
@@ -22,49 +21,33 @@ interface Meta {
 }
 
 interface TracksState {
-    tracks: Track[];
     meta: Meta | null;
     loading: boolean;
     error: string | null;
-    selectedTrackIds: [];
+    selectedTrackIds: string[];
 }
 
 const initialState: TracksState = {
-    tracks: [],
     meta: null,
     loading: false,
     error: null,
     selectedTrackIds: [],
 };
 
-export const fetchTracks = createAsyncThunk(
-    'tracks/fetchTracks',
-    async (filters: FiltersState, {rejectWithValue}) => {
-        try {
-            const {data} = await getTracks(filters);
-            return data;
-        } catch (err: unknown) {
-            if (err instanceof Error) {
-                return rejectWithValue(err.message || 'Failed to fetch tracks');
-            }
-            return rejectWithValue('Failed to fetch tracks');
-        }
-    }
-);
 
 export const deleteSelectedTracksAsync = createAsyncThunk(
     'tracks/deleteSelectedTracksAsync',
-    async (trackIds: string[], {dispatch, rejectWithValue}) => {
+    async (trackIds: string[], {rejectWithValue}) => {
         try {
-            const response = await deleteMultipleTracks(trackIds); // Ваша функція для видалення треків
-            dispatch(deleteSelectedTracks());
+            const response = await deleteMultipleTracks(trackIds);
+
             return response;
-        } catch (err: any) {
+        } catch (error) {
+            console.log(error);
             return rejectWithValue('Failed to delete tracks');
         }
     }
 );
-
 
 const tracksSlice = createSlice({
     name: 'tracks',
@@ -94,17 +77,7 @@ const tracksSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTracks.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchTracks.fulfilled, (state, action) => {
-                state.tracks = action.payload.data;
-                state.meta = action.payload.meta;
-                state.loading = false;
-            })
-            .addCase(fetchTracks.rejected, (state, action) => {
-                state.loading = false;
+            .addCase(deleteSelectedTracksAsync.rejected, (state, action) => {
                 state.error = action.payload as string;
             });
     }

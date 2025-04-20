@@ -1,15 +1,27 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export type ModalType =
     | 'CREATE_TRACK'
     | 'EDIT_TRACK'
-    | 'DELETE_TRACK'
-    | 'UPLOAD_FILE'
+    | 'CONFIRM'
     | null;
+
+export type CreateTrackProps = { defaultTitle?: string };
+export type EditTrackProps = { trackSlug: string };
+export type ConfirmProps = {
+    onConfirm: () => void;
+    onCancel: () => void;
+};
+
+type ModalProps =
+    | CreateTrackProps
+    | EditTrackProps
+    | ConfirmProps
+    | Record<string, never>;
 
 interface ModalState {
     modalType: ModalType;
-    modalProps: Record<string, any>;
+    modalProps: ModalProps;
     isOpen: boolean;
 }
 
@@ -24,14 +36,14 @@ const modalSlice = createSlice({
     initialState,
     reducers: {
         openModal: (
-            state,
-            action: PayloadAction<{ modalType: ModalType; modalProps?: Record<string, any> }>
+            state: ModalState,
+            action: PayloadAction<{ modalType: ModalType; modalProps?: ModalProps }>
         ) => {
             state.modalType = action.payload.modalType;
             state.modalProps = action.payload.modalProps || {};
             state.isOpen = true;
         },
-        closeModal: (state) => {
+        closeModal: (state: ModalState) => {
             state.modalType = null;
             state.modalProps = {};
             state.isOpen = false;
@@ -39,5 +51,5 @@ const modalSlice = createSlice({
     },
 });
 
-export const { openModal, closeModal } = modalSlice.actions;
+export const {openModal, closeModal} = modalSlice.actions;
 export default modalSlice.reducer;

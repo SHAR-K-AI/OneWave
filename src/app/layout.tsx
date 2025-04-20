@@ -1,15 +1,15 @@
 import "./globals.css";
 
-import {Toaster} from 'react-hot-toast';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 
-import AudioPlayer from "@/components/AudioPlayer";
+import Equalizer from "@/components/Equalizer";
 import ReduxProvider from '@/lib/store/ReduxProvider';
 import ModalManager from "@/components/modals/ModalManager";
+import Toaster from "@/components/widgets/Toaster";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -34,9 +34,9 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
         <main className="flex-grow bg-gray-100">
             <ReduxProvider>
                 {children}
-                <Toaster position="top-right"/>
+                <Toaster/>
                 <ModalManager/>
-                <AudioPlayer/>
+                <Equalizer/>
             </ReduxProvider>
         </main>
         <Footer/>

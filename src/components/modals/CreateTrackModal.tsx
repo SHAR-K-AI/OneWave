@@ -27,7 +27,7 @@ export default function CreateTrackModal() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity" />
+                    <div className="fixed inset-0 bg-gray-900 opacity-75 transition-opacity" />
                 </Transition.Child>
 
                 <div className="fixed inset-0 z-50 overflow-y-auto">

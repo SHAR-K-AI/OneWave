@@ -1,40 +1,31 @@
-import {AxiosResponse} from 'axios';
-import {toast} from 'react-hot-toast';
+import { AxiosResponse } from 'axios';
+import { toast } from 'react-hot-toast';
 import apiClient from '@/lib/client/apiClient';
 
 export interface Track {
     id: string;
+    slug: string;
     title: string;
+    album: string;
     artist: string;
+    audioFile: string;
+    updatedAt: string;
+    coverImage: string;
+    genres: string[] | { id: string; name: string }[];
 }
 
-export interface TrackData {
-    title: string;
-    artist: string;
+export interface FiltersProps {
+    page?: number;
+    limit?: number;
+    sortBy?: string;
+    order?: string;
+    search?: string;
+    genre?: string;
+    artist?: string;
 }
 
-interface GetTracksParams {
-    page: number;
-    limit: number;
-    sortBy: string;
-    order: string;
-    search: string;
-    genre: string;
-    artist: string;
-}
-
-/**
- *
- * @param page
- * @param limit
- * @param sortBy
- * @param order
- * @param search
- * @param genre
- * @param artist
- */
 export const getTracks = async (
-    {page, limit, sortBy, order, search, genre, artist}: GetTracksParams
+    { page, limit, sortBy, order, search, genre, artist }: FiltersProps
 ) => {
     try {
         const queryParams = new URLSearchParams();
@@ -48,119 +39,135 @@ export const getTracks = async (
         if (artist) queryParams.append('artist', artist);
 
         const queryString = queryParams.toString();
-        const response = await apiClient.get(`/tracks?${queryString}`);
-        return response;
-    } catch (error: any) {
-        toast.error('Failed to fetch tracks.');
+        return await apiClient.get(`/tracks?${queryString}`);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            toast.error(`Failed to fetch tracks: ${error.message}`);
+        } else {
+            toast.error('Failed to fetch tracks.');
+        }
         throw error;
     }
 };
 
-/**
- *
- * @param slug
- */
 export const getTrackBySlug = async (slug: string): Promise<AxiosResponse<Track>> => {
     try {
         const response = await apiClient.get(`/tracks/${slug}`);
         return response;
-    } catch (error: any) {
-        toast.error('Failed to load track by slug.');
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            toast.error(`Failed to load track by slug: ${error.message}`);
+        } else {
+            toast.error('Failed to load track by slug.');
+        }
         throw error;
     }
 };
 
-/**
- *
- * @param id
- */
 export const getTrackById = async (id: string): Promise<AxiosResponse<Track>> => {
     try {
         const response = await apiClient.get(`/tracks/${id}`);
         return response;
-    } catch (error: any) {
-        toast.error('Failed to load track by ID.');
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            toast.error(`Failed to load track by ID: ${error.message}`);
+        } else {
+            toast.error('Failed to load track by ID.');
+        }
         throw error;
     }
 };
 
-/**
- *
- * @param data
- */
-export const createTrack = async (data: TrackData): Promise<AxiosResponse<Track>> => {
+export const createTrack = async (data: Track): Promise<AxiosResponse<Track>> => {
     try {
         const response = await apiClient.post('/tracks', data);
         toast.success('Track created successfully!');
         return response;
-    } catch (error: any) {
-        toast.error('Failed to create track.');
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            toast.error(`Failed to create track: ${error.message}`);
+        } else {
+            toast.error('Failed to create track.');
+        }
         throw error;
     }
 };
 
-/**
- *
- * @param trackId
- * @param data
- */
-export const updateTrack = async (trackId: string, data: TrackData): Promise<AxiosResponse<Track>> => {
+export const updateTrack = async (trackId: string, data: Track): Promise<AxiosResponse<Track>> => {
     try {
         const response = await apiClient.put(`/tracks/${trackId}`, data);
         toast.success('Track updated!');
         return response;
-    } catch (error: any) {
-        toast.error('Failed to update track.');
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            toast.error(`Failed to update track: ${error.message}`);
+        } else {
+            toast.error('Failed to update track.');
+        }
         throw error;
     }
 };
 
-/**
- *
- * @param id
- */
-export const deleteTrack = async (id: number): Promise<AxiosResponse<void>> => {
+export const deleteTrack = async (id: string | undefined): Promise<AxiosResponse<void>> => {
     try {
         const response = await apiClient.delete(`/tracks/${id}`);
         toast.success('Track deleted!');
         return response;
-    } catch (error: any) {
-        toast.error('Error deleting track.');
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            toast.error(`Error deleting track: ${error.message}`);
+        } else {
+            toast.error('Error deleting track.');
+        }
         throw error;
     }
 };
 
-/**
- *
- * @param trackId
- * @param file
- */
 export const uploadTrackFile = async (trackId: string, file: File): Promise<AxiosResponse> => {
     try {
         const formData = new FormData();
         formData.append('file', file);
         const response = await apiClient.post(`/tracks/${trackId}/upload`, formData, {
-            headers: {'Content-Type': 'multipart/form-data'},
+            headers: { 'Content-Type': 'multipart/form-data' },
         });
         toast.success('File uploaded!');
         return response;
-    } catch (error: any) {
-        toast.error('Failed to upload file.');
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            toast.error(`Failed to upload file: ${error.message}`);
+        } else {
+            toast.error('Failed to upload file.');
+        }
         throw error;
     }
 };
 
-/**
- *
- * @param ids
- */
 export const deleteMultipleTracks = async (ids: string[]): Promise<AxiosResponse<void>> => {
     try {
-        const response = await apiClient.post('/tracks/delete', {ids});
+        const response = await apiClient.post('/tracks/delete', { ids });
         toast.success('Tracks deleted successfully!');
         return response;
-    } catch (error: any) {
-        toast.error('Failed to delete multiple tracks.');
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            toast.error(`Failed to delete multiple tracks: ${error.message}`);
+        } else {
+            toast.error('Failed to delete multiple tracks.');
+        }
+        throw error;
+    }
+};
+
+export const deleteTrackFile = async (trackId: string): Promise<AxiosResponse<void>> => {
+    try {
+        const response = await apiClient.delete(`/tracks/${trackId}/file`);
+        toast.success('File deleted from track!');
+        return response;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            toast.error(`Failed to delete track file: ${error.message}`);
+        } else {
+            toast.error('Failed to delete track file.');
+        }
         throw error;
     }
 };

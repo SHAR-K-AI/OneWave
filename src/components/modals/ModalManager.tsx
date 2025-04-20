@@ -5,7 +5,8 @@ import { useSelector } from 'react-redux';
 
 import EditTrackModal from "@/components/modals/EditTrackModal";
 import CreateTrackModal from "@/components/modals/CreateTrackModal";
-
+import {ConfirmProps, EditTrackProps} from "@/lib/store/slices/modalSlice";
+import ConfirmationModal from "@/components/modals/ConfirmationModal";  // Import your new component
 
 const ModalManager = () => {
     const { modalType, modalProps, isOpen } = useSelector((state: RootState) => state.modal);
@@ -14,9 +15,11 @@ const ModalManager = () => {
 
     switch (modalType) {
         case 'CREATE_TRACK':
-            return <CreateTrackModal {...modalProps} />;
+            return <CreateTrackModal />;
         case 'EDIT_TRACK':
-            return <EditTrackModal {...modalProps} />;
+            return <EditTrackModal {...(modalProps as EditTrackProps)} />;
+        case 'CONFIRM':
+            return <ConfirmationModal  {...(modalProps as ConfirmProps)}/>;
         default:
             return null;
     }

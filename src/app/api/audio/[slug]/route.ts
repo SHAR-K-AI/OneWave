@@ -21,12 +21,6 @@ const sendAudioFileResponse = (fileBuffer: Buffer, contentLength: number) => {
     });
 };
 
-/**
- * Handle GET request for audio file.
- * @param req - The request object.
- * @param params - The parameters from the request URL.
- * @returns - NextResponse with the audio file or error.
- */
 export async function GET(req: Request, { params }: { params: { slug: string } }) {
     const { slug } = params;
 
@@ -40,7 +34,6 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
             throw new Error('File not found');
         }
     } catch (error) {
-        // Fallback to reading the file from the server's filesystem
         const filePath = path.resolve(process.cwd(), 'audio', `${slug}.mp3`);
 
         if (fs.existsSync(filePath)) {

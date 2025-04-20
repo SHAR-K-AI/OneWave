@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {XMarkIcon} from '@heroicons/react/20/solid';
 import {Dialog, Transition} from '@headlessui/react';
 
-import {closeModal} from '@/lib/store/slices/modalSlice';
+import {closeModal, EditTrackProps} from '@/lib/store/slices/modalSlice';
 import EditTrackFormContent from "@/components/forms/EditTrackFormContent";
 
 /**
@@ -14,7 +14,7 @@ import EditTrackFormContent from "@/components/forms/EditTrackFormContent";
  * @param trackSlug
  * @constructor
  */
-export default function EditTrackModal({trackSlug}: Props) {
+export default function EditTrackModal({ trackSlug }: EditTrackProps) {
     const dispatch = useDispatch();
     const cancelButtonRef = useRef(null);
 
@@ -32,7 +32,7 @@ export default function EditTrackModal({trackSlug}: Props) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity"/>
+                    <div className="fixed inset-0 bg-gray-900 opacity-75 transition-opacity"/>
                 </Transition.Child>
 
                 <div className="fixed inset-0 z-50 overflow-y-auto">

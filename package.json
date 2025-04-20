@@ -5,11 +5,14 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start",
+    "start": "npm run build && next start -p 3001",
     "lint": "next lint",
-    "go": "concurrently \"npm run start:test-case\" \"npm run start:deepwave\"",
-    "start:test-case": "cd test-case/test-case/ && npm install && npm run dev",
-    "start:deepwave": "yarn && next dev --turbopack -p 3001"
+    "go": "concurrently \"npm run dev:api\" \"npm run dev:front\"",
+    "dev:api": "cd test-case/test-case/ && npm install && npm run dev",
+    "dev:front": "yarn && next dev --turbopack -p 3001"
+  },
+  "engines": {
+    "node": "20.13.1"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.2",
@@ -21,16 +24,15 @@
     "concurrently": "^9.1.2",
     "framer-motion": "^12.7.4",
     "next": "15.3.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-hook-form": "^7.55.0",
     "react-hot-toast": "^2.5.2",
     "react-redux": "^9.2.0",
     "react-select": "^5.10.1",
     "react-select-async-paginate": "^0.7.9",
     "react-spinners": "^0.16.1",
-    "sass": "^1.86.3",
-    "zustand": "^5.0.3"
+    "sass": "^1.86.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
