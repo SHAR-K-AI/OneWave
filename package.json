@@ -12,7 +12,7 @@
     "dev:api": "cd test-case/test-case/ && npm install && npm run dev",
     "dev:front": "yarn && next dev --turbopack",
     "prod:api": "cd test-case/test-case/ && npm install && npm run build && npm run start",
-    "prod:front": "yarn && yarn build && yarn start",
+    "prod:front": "yarn && yarn start",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
@@ -38,7 +38,8 @@
     "react-select": "^5.10.1",
     "react-select-async-paginate": "^0.7.9",
     "react-spinners": "^0.16.1",
-    "sass": "^1.86.3"
+    "sass": "^1.86.3",
+    "use-debounce": "^10.0.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

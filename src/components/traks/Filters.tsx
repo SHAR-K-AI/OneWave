@@ -2,6 +2,7 @@
 
 import {useRouter} from 'next/navigation';
 import React, {useEffect, useState} from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import {FiltersProps, Track} from "@/lib/client/apiTracks";
 
 import SelectAllButton from "@/components/buttons/SelectAllButton";
@@ -26,9 +27,8 @@ const Filters = ({filters, tracks}: { filters: FiltersProps, tracks: Track[] }) 
     const [order, setOrder] = useState(filters.order);
     const [limit, setLimit] = useState(filters.limit);
 
-    useEffect(() => {
+    const debouncedPush = useDebouncedCallback(() => {
         const params = new URLSearchParams();
-
         if (page) params.set('page', page.toString());
         if (search) params.set('search', Array.isArray(search) ? search.join(',') : search);
         if (genre) params.set('genre', Array.isArray(genre) ? genre.join(',') : genre);
@@ -38,8 +38,12 @@ const Filters = ({filters, tracks}: { filters: FiltersProps, tracks: Track[] }) 
         if (limit) params.set('limit', limit.toString());
 
         router.push(`?${params.toString()}`);
+    }, 300);
+
+    useEffect(() => {
+        debouncedPush();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, genre, artist, sortBy, order, limit, router]);
+    }, [search, genre, artist, sortBy, order, limit]);
 
     return (
         <div
