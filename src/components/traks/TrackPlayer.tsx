@@ -28,12 +28,11 @@ const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
 
     const handlePlay = () => {
         if (currentTrackId && currentTrackId !== track.id) {
+            const previousAudio = document.getElementById(`audio-${currentTrackId}` ) as HTMLAudioElement;
 
-            const previousAudio = document.getElementById(currentTrackId) as HTMLAudioElement;
             if (previousAudio) {
                 dispatch(pause());
                 previousAudio.pause();
-
             }
         }
 
@@ -95,7 +94,10 @@ const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
                     min="0"
                     max="1"
                     step="0.01"
+                    disabled={true}
+                    defaultValue={0}
                     onChange={handleProgressChange}
+                    className="w-full mx-2"
                 />
                 {/*TODO data-testid="pause-button-{id}" - Pause button*/}
                 <button

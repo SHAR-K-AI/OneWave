@@ -2,6 +2,7 @@ import Filters from "@/components/traks/Filters";
 import TrackItem from "@/components/traks/TrackItem";
 import Pagination from "@/components/traks/Pagination";
 
+import ActionButtons from "@/components/buttons/ActionButtons";
 import {FiltersProps, getTracks, Track} from "@/lib/client/apiTracks";
 
 type Props = {
@@ -15,7 +16,7 @@ type Props = {
  * @constructor
  */
 export default async function TracksPage(
-    {  searchParams }: Props
+    {searchParams}: Props
 ) {
     const params = await searchParams;
 
@@ -42,7 +43,10 @@ export default async function TracksPage(
                 Track List
             </h1>
 
-            <Filters filters={filters} tracks={tracks}/>
+            <div className="mb-6 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-7 bg-white p-4 rounded-lg text-gray-400">
+                <Filters filters={filters}/>
+                <ActionButtons tracks={tracks}/>
+            </div>
 
             {tracks.length === 0 ? (
                 <p className="text-center text-gray-500 mt-10 text-lg flex items-center justify-center h-36">

@@ -1,12 +1,10 @@
 'use client';
 
 import classNames from 'classnames';
-import {useEffect, useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
-
-import {RootState} from '@/lib/store';
-
-import { EyeIcon, EyeSlashIcon} from '@heroicons/react/20/solid';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/lib/store';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/20/solid';
 import Spinner from "@/components/widgets/Spinner";
 
 interface ExtendedWindow extends Window {
@@ -14,13 +12,8 @@ interface ExtendedWindow extends Window {
     webkitAudioContext?: typeof AudioContext;
 }
 
-/**
- *
- * @param fixed
- * @constructor
- */
-export default function Equalizer({fixed = true}: { fixed?: boolean }) {
-    const {currentTrackId, isPlaying} = useSelector((state: RootState) => state.player);
+export default function Equalizer({ fixed = true }: { fixed?: boolean }) {
+    const { currentTrackId, isPlaying } = useSelector((state: RootState) => state.player);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const audioCtxRef = useRef<AudioContext | null>(null);
@@ -28,19 +21,21 @@ export default function Equalizer({fixed = true}: { fixed?: boolean }) {
     const animationRef = useRef<number | null>(null);
     const [isPlayerVisible, setPlayerVisible] = useState(true);
 
-    useEffect(() => {
+    const initializeAudioContext = useCallback(() => {
         if (!currentTrackId) return;
 
-        const AudioContextClass =
-            (window as ExtendedWindow).AudioContext || (window as ExtendedWindow).webkitAudioContext;
-
+        const AudioContextClass = (window as ExtendedWindow).AudioContext || (window as ExtendedWindow).webkitAudioContext;
         if (!audioCtxRef.current && AudioContextClass) {
             audioCtxRef.current = new AudioContextClass();
         }
+    }, [currentTrackId]);
+
+    useEffect(() => {
+        initializeAudioContext();
+
+        if (!currentTrackId || !audioCtxRef.current) return;
 
         const ctx = audioCtxRef.current;
-        if (!ctx) return;
-
         const audioElement = document.getElementById(`audio-${currentTrackId}`) as HTMLAudioElement;
         if (!audioElement) return;
 
@@ -99,7 +94,9 @@ export default function Equalizer({fixed = true}: { fixed?: boolean }) {
             analyser.disconnect();
             audioElement.pause();
         };
-    }, [currentTrackId]);
+    }, [currentTrackId, initializeAudioContext]);
+
+    const togglePlayerVisibility = () => setPlayerVisible(prev => !prev);
 
     if (!currentTrackId) return null;
 
@@ -107,23 +104,23 @@ export default function Equalizer({fixed = true}: { fixed?: boolean }) {
         <>
             <div
                 className={classNames(
-                    {"fixed bottom-0 left-0 right-0 z-50": fixed},
+                    { "fixed bottom-0 left-0 right-0 z-50": fixed },
                     "bg-white w-full px-4 inset-shadow-sm inset-shadow-indigo-500/50",
-                    {invisible: !isPlayerVisible}
+                    { invisible: !isPlayerVisible }
                 )}
             >
                 <div className="py-4 px-4 md:px-8 lg:px-24 flex items-center justify-between max-w-full">
-                    <div className="w-full h-24 bg-white relative flex items-center justify-center w-full">
+                    <div className="w-full h-24 bg-white relative flex items-center justify-center">
                         <canvas ref={canvasRef} className="w-full h-24 bg-white px-4"/>
-                        {isPlaying && <Spinner/>}
+                        {isPlaying && <Spinner />}
                     </div>
                 </div>
             </div>
             <button
-                onClick={() => setPlayerVisible(!isPlayerVisible)}
+                onClick={togglePlayerVisibility}
                 className="fixed bottom-20 left-5 z-50 px-2 py-2 bg-gray-800 text-white rounded-full hover:bg-gray-600 w-9 h-9"
             >
-                {isPlayerVisible ? <EyeSlashIcon className="w-5 h-5"/> : <EyeIcon className="w-5 h-5"/>}
+                {isPlayerVisible ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
             </button>
         </>
     );
