@@ -7,7 +7,7 @@ import CreateTrackFormContent from '@/components/forms/CreateTrackFormContent';
 export default function CreateTrackPage() {
     return (
         <div className="flex justify-center items-center py-10">
-            <CreateTrackFormContent className="rounded-lg shadow-lg "/>
+            <CreateTrackFormContent/>
         </div>
     );
 }

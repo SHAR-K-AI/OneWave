@@ -1,17 +1,17 @@
 import React from 'react';
 import {Track} from "@/lib/client/apiTracks";
 
+import {getAudioFileUrl} from "@/helpers/audio";
 import {formatDate, generateTrackItemIds} from "@/helpers/track";
 
-import AppImage from "@/components/AppImage";
+import TrackImage from "@/components/traks/TrackImage";
+import TrackPlayer from "@/components/traks/TrackPlayer";
 import EditTrackButton from "@/components/buttons/EditTrackButton";
-import PlayTrackButton from "@/components/buttons/PlayTrackButton";
+import DanceTrackButton from "@/components/buttons/DanceTrackButton";
 import ViewTrackButton from "@/components/buttons/ViewTrackButton";
 import SelectTrackButton from "@/components/buttons/SelectTrackButton";
 import DeleteTrackButton from "@/components/buttons/DeleteTrackButton";
 import UploadTrackFileButton from "@/components/buttons/UploadTrackFileButton";
-import TrackPlayer from "@/components/traks/TrackPlayer";
-import {getAudioFileUrl} from "@/helpers/audio";
 
 /**
  *
@@ -19,38 +19,33 @@ import {getAudioFileUrl} from "@/helpers/audio";
  * @constructor
  */
 const TrackItem: React.FC<{ track: Track }> = ({track}) => {
+
     return (
+        /*TODO data-testid="track-item-{id}" - Each track item container (where {id} is the track ID)*/
         <div
             key={track.id}
             data-testid={generateTrackItemIds(track.id)}
             className="group bg-white p-6 rounded-lg shadow-lg flex flex-col items-center text-center relative transform transition-transform duration-300 hover:scale-105 cursor-pointer"
         >
             <SelectTrackButton trackId={track.id}/>
-            <div className="mb-4 w-full relative">
-                <AppImage
-                    key={track.coverImage}
-                    src={track.coverImage}
-                    alt={track.title}
-                    width={200}
-                    height={200}
-                    className="w-64 h-64 object-cover rounded-full m-auto transition-all duration-300 group-hover:shadow-lg group-hover:rotate-4"
-                />
-            </div>
+            <TrackImage track={track}/>
+            {/*TODO data-testid="track-item-{id}-title" - Track title text*/}
             <div
-                className="text-gray-600 font-semibold text-xl mb-2"
+                className="text-gray-600 font-semibold text-xl mb-2 truncate w-full"
                 data-testid={generateTrackItemIds(track.id, "title")}
             >
                 {track.title}
             </div>
+            {/*TODO data-testid="track-item-{id}-artist" - Track artist text*/}
             <div
-                className="text-gray-600 mb-1"
+                className="text-gray-600 mb-1 truncate w-full"
                 data-testid={generateTrackItemIds(track.id, "artist")}
             >
                 Artist: {track.artist}
             </div>
-            <div className="text-gray-500 mb-1">Album: {track.album}</div>
-            <div className="text-gray-500 mb-1">Genres: {track.genres.join(', ')}</div>
-            <div className="text-gray-400 text-sm mb-4">
+            <div className="text-gray-500 mb-1 truncate w-full">Album: {track.album}</div>
+            <div className="text-gray-500 mb-1 truncate w-full">Genres: {track.genres.join(', ')}</div>
+            <div className="text-gray-400 text-sm mb-4 truncate w-full">
                 Updated At: {formatDate(track.updatedAt)}
             </div>
             <TrackPlayer
@@ -58,8 +53,8 @@ const TrackItem: React.FC<{ track: Track }> = ({track}) => {
                 src={track.audioFile ? getAudioFileUrl(track.audioFile) : "/api/audio/default"}
             />
             <div className="flex gap-2">
-                <UploadTrackFileButton trackId={track.id}/>
-                <PlayTrackButton track={track}/>
+                <UploadTrackFileButton trackId={track.id} hasAudio={!!track.audioFile}/>
+                <DanceTrackButton/>
                 <ViewTrackButton slug={track.slug}/>
                 <EditTrackButton
                     slug={track.slug}

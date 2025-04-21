@@ -3,21 +3,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import {motion} from 'framer-motion';
-import {useDispatch} from 'react-redux';
-import {play, setTrack} from '@/lib/store/slices/playerSlice';
 
 /**
  *
  * @constructor
  */
 export default function Home() {
-    const dispatch = useDispatch();
-
-    const handlePlay = () => {
-        dispatch(setTrack("/api/audio/default"));
-        dispatch(play());
-    };
-
     return (
         <div className="min-h-screen bg-[#121212] text-white flex flex-col">
             <section className="flex flex-col items-center justify-center text-center py-24 px-4">
@@ -44,7 +35,6 @@ export default function Home() {
                     transition={{delay: 0.4, duration: 0.6}}
                 >
                     <button
-                        onClick={handlePlay}
                         className="mt-8 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold rounded-lg transition cursor-pointer"
                     >
                         Launch Player

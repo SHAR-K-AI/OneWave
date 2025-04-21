@@ -1,0 +1,15 @@
+{
+  "title": "Title",
+  "artist": "Artist",
+  "album": "Album",
+  "genres": [
+    "Hip Hop",
+    "Classical"
+  ],
+  "coverImage": "https://f4.bcbits.com/img/a0737503650_10.jpg",
+  "slug": "title",
+  "id": "1745067609070",
+  "createdAt": "2025-04-19T13:00:09.070Z",
+  "updatedAt": "2025-04-19T13:38:41.941Z",
+  "audioFile": "1745067609070.mp3"
+}

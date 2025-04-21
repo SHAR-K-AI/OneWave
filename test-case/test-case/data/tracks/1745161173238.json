@@ -1,0 +1,14 @@
+{
+  "title": "1111",
+  "artist": "2222",
+  "album": "33333",
+  "genres": [
+    "Rock"
+  ],
+  "coverImage": "https://cdn-p.smehost.net/sites/28d35d54a3c64e2b851790a18a1c4c18/wp-content/uploads/2017/04/19870831_bad_album-300x300.jpg",
+  "slug": "1111",
+  "id": "1745161173238",
+  "createdAt": "2025-04-20T14:59:33.238Z",
+  "updatedAt": "2025-04-21T09:38:35.449Z",
+  "audioFile": "1745161173238.mp3"
+}

@@ -1,19 +1,16 @@
 import fs from 'fs';
 import path from 'path';
-import { NextResponse } from 'next/server';
-import { getAudioFile } from "@/lib/client/apiFile";
+import {NextResponse} from 'next/server';
+import {getAudioFile} from "@/lib/client/apiFile";
 
 /**
- * Helper function to send audio file response.
- * @param fileBuffer - The audio file buffer.
- * @param contentLength - The content length of the file.
- * @returns - NextResponse with audio file and headers.
+ *
+ * @param fileBuffer
  */
-const sendAudioFileResponse = (fileBuffer: Buffer, contentLength: number) => {
+const sendAudioFileResponse = (fileBuffer: Blob | Buffer) => {
     return new NextResponse(fileBuffer, {
         headers: {
             'Content-Type': 'audio/mp3',
-            'Content-Length': contentLength.toString(),
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET',
             'Access-Control-Allow-Headers': 'Content-Type',
@@ -21,15 +18,18 @@ const sendAudioFileResponse = (fileBuffer: Buffer, contentLength: number) => {
     });
 };
 
-export async function GET(req: Request, { params }: { params: { slug: string } }) {
-    const { slug } = params;
+export async function GET(
+    request: Request,
+    {params}: { params: Promise<{ slug: string }> }
+) {
+    const {slug} = await params;
 
     try {
         const response = await getAudioFile(slug);
 
         if (response.status === 200) {
             const file = response.data;
-            return sendAudioFileResponse(file, file.byteLength);
+            return sendAudioFileResponse(file);
         } else {
             throw new Error('File not found');
         }
@@ -38,10 +38,10 @@ export async function GET(req: Request, { params }: { params: { slug: string } }
 
         if (fs.existsSync(filePath)) {
             const file = fs.readFileSync(filePath);
-            return sendAudioFileResponse(file, file.byteLength);
+            return sendAudioFileResponse(file);
         } else {
             console.error(error);
-            return NextResponse.json({ error: 'File not found' }, { status: 404 });
+            return NextResponse.json({error: 'File not found'}, {status: 404});
         }
     }
 }

@@ -23,7 +23,7 @@ type DeleteSelectedTracksButton = {
 const DeleteSelectedTracksButton = ({className}: DeleteSelectedTracksButton) => {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
-    const {selectedTrackIds} = useSelector((state: RootState) => state.tracks);
+    const {selectedTrackIds, selectionModeEnabled} = useSelector((state: RootState) => state.tracks);
 
     const handleConfirmDelete = () => {
         deleteSelectedTracks();
@@ -47,9 +47,13 @@ const DeleteSelectedTracksButton = ({className}: DeleteSelectedTracksButton) => 
         }));
     };
 
+    if (!selectionModeEnabled) return null;
+
     return (
         <div className="col-span-1 flex justify-center">
+            {/*TODO data-testid="bulk-delete-button" - Button to delete selected tracks*/}
             <button
+                data-testid="bulk-delete-button"
                 onClick={openConfirmDeleteModal}
                 disabled={selectedTrackIds.length === 0}
                 className={classNames(className, "px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 transition transform hover:scale-105 cursor-pointer")}

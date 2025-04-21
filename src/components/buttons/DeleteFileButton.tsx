@@ -5,6 +5,11 @@ interface DeleteFileButtonProps {
     trackId: string;
 }
 
+/**
+ *
+ * @param trackId
+ * @constructor
+ */
 const DeleteFileButton: React.FC<DeleteFileButtonProps> = ({ trackId }) => {
     const handleDelete = async () => {
         try {

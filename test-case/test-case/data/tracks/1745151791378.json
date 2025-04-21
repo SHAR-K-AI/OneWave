@@ -1,0 +1,15 @@
+{
+  "title": "Update 2025",
+  "artist": "Update Artist",
+  "album": "Update Album",
+  "genres": [
+    "Pop",
+    "Electronic"
+  ],
+  "coverImage": "https://www.billboard.com/wp-content/uploads/media/tyler-the-creator-igor-album-art-2019-billboard-embed.jpg",
+  "slug": "update-2025",
+  "id": "1745151791378",
+  "createdAt": "2025-04-20T12:23:11.378Z",
+  "updatedAt": "2025-04-21T10:11:58.565Z",
+  "audioFile": "1745151791378.mp3"
+}

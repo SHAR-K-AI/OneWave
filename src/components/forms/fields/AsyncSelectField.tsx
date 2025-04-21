@@ -1,15 +1,17 @@
-import { components } from 'react-select';
-import {Controller} from 'react-hook-form';
+import React from "react";
 import AsyncSelect from 'react-select/async';
+import {Track} from "@/lib/client/apiTracks";
+import {Control, Controller} from 'react-hook-form';
+import {components, GroupBase, InputProps} from 'react-select';
 
 type Option = {
     value: string;
     label: string;
 };
 
-type AsyncSelectProps<T> = {
-    control: any;
-    name: string;
+type AsyncSelectProps = {
+    control: Control<Track>;
+    name: keyof Track;
     label: string;
     error?: string;
     dataTestId?: string;
@@ -25,7 +27,7 @@ type AsyncSelectProps<T> = {
  * @param control
  * @param dataTestId
  */
-export default function _AsyncSelect<T>(
+export default function _AsyncSelect(
     {
         name,
         label,
@@ -33,11 +35,10 @@ export default function _AsyncSelect<T>(
         client,
         control,
         dataTestId,
-    }: AsyncSelectProps<T>
+    }: AsyncSelectProps
 ) {
 
     const loadOptions = async (inputValue: string): Promise<Option[]> => {
-        console.log(1111)
         const response = await client();
         const allOptions = response.data.map((name) => ({
             value: name,
@@ -51,7 +52,7 @@ export default function _AsyncSelect<T>(
             );
     };
 
-    const CustomInput = (props: any) => (
+    const CustomInput = (props: InputProps<{ value: string; label: string }, true, GroupBase<Option>>) => (
         <components.Input {...props} innerRef={props.innerRef} data-testid={dataTestId} />
     );
 
@@ -74,10 +75,12 @@ export default function _AsyncSelect<T>(
                         }
                         value={
                             Array.isArray(field.value)
-                                ? field.value.map((val: string) => ({
-                                    value: val,
-                                    label: val,
-                                }))
+                                ? field.value.map((val) => {
+                                    if (typeof val === 'string') {
+                                        return { value: val, label: val };
+                                    }
+                                    return { value: val.id, label: val.name };
+                                })
                                 : []
                         }
                         classNamePrefix="react-select"

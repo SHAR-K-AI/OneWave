@@ -42,6 +42,7 @@ export default function Pagination({ currentPage, totalPages, filters }: Paginat
     };
 
     return (
+        /*TODO data-testid="pagination" - Pagination container (if pagination is used)*/
         <div className="flex items-center justify-center gap-1 mt-8" data-testid="pagination">
             {currentPage === 1 ? (
                 <span
@@ -51,6 +52,7 @@ export default function Pagination({ currentPage, totalPages, filters }: Paginat
                     Prev
                 </span>
             ) : (
+                /*TODO data-testid="pagination-prev" - Previous page button*/
                 <Link
                     href={getPageLink(currentPage - 1)}
                     data-testid="pagination-prev"
@@ -87,6 +89,7 @@ export default function Pagination({ currentPage, totalPages, filters }: Paginat
                     <ChevronRightIcon className="h-4 w-4 ml-1"/>
                 </span>
             ) : (
+                /*TODO data-testid="pagination-next" - Next page button*/
                 <Link
                     href={getPageLink(currentPage + 1)}
                     data-testid="pagination-next"

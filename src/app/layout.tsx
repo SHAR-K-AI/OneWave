@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 
-import Equalizer from "@/components/Equalizer";
+import Equalizer from "@/components/widgets/Equalizer";
 import ReduxProvider from '@/lib/store/ReduxProvider';
 import ModalManager from "@/components/modals/ModalManager";
 import Toaster from "@/components/widgets/Toaster";

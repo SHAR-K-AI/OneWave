@@ -1,21 +1,29 @@
 "use client";
 
-import {useDispatch, useSelector} from 'react-redux';
+import classNames from "classnames";
 import React, { useRef} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {PlayIcon, PauseIcon} from '@heroicons/react/20/solid';
+
+import {RootState} from "@/lib/store";
 import {Track} from '@/lib/client/apiTracks';
 import {play, pause, setTrackId} from '@/lib/store/slices/playerSlice';
-import classNames from "classnames";
 
 interface TrackPlayerProps {
     track: Track;
     src: string;
 }
 
+/**
+ *
+ * @param track
+ * @param src
+ * @constructor
+ */
 const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
     const dispatch = useDispatch();
-    const currentTrackId = useSelector((state: any) => state.player.currentTrackId);
-    const isPlaying = useSelector((state: any) => state.player.isPlaying);
+    const currentTrackId = useSelector((state: RootState) => state.player.currentTrackId);
+    const isPlaying = useSelector((state: RootState) => state.player.isPlaying);
     const audioRef = useRef<HTMLAudioElement>(null);
 
     const handlePlay = () => {
@@ -31,8 +39,7 @@ const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
 
         if (audioRef.current) {
             audioRef.current.play();
-            console.log(track.id, "track.idtrack.id")
-            dispatch(setTrackId(track.id)); // Оновити ID поточної пісні
+            dispatch(setTrackId(track.id));
             dispatch(play());
 
         }
@@ -42,7 +49,6 @@ const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
         if (audioRef.current) {
             dispatch(pause());
             audioRef.current.pause();
-            console.log(currentTrackId === track.id, isPlaying, "track.idtrack.id")
         }
     };
 
@@ -66,9 +72,11 @@ const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
     };
 
     return (
+        /*TODO data-testid="audio-player-{id}" - Audio player container for a track*/
         <div data-testid={`audio-player-${track.id}`} className="audio-player p-4 w-full">
             <audio ref={audioRef} src={src} onTimeUpdate={updateProgress} id={`audio-${track.id.toString()}`}/>
             <div className="controls flex justify-around items-center text-gray-400">
+                {/*TODO data-testid="play-button-{id}" - Play button*/}
                 <button
                     className="text-gray-400"
                     data-testid={`play-button-${track.id}`}
@@ -80,6 +88,7 @@ const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
                             {"text-green-400": isPlaying && (currentTrackId === track.id)})}
                     />
                 </button>
+                {/*TODO data-testid="audio-progress-{id}" - Audio progress indicator*/}
                 <input
                     type="range"
                     data-testid={`audio-progress-${track.id}`}
@@ -88,6 +97,7 @@ const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
                     step="0.01"
                     onChange={handleProgressChange}
                 />
+                {/*TODO data-testid="pause-button-{id}" - Pause button*/}
                 <button
                     data-testid={`pause-button-${track.id}`}
                     onClick={handlePause}

@@ -1,11 +1,11 @@
 'use client';
 
-import {useDispatch} from "react-redux";
 import {useEffect, useState} from 'react';
 import {useRouter, useParams} from 'next/navigation';
 
+import Spinner from "@/components/widgets/Spinner";
 import TrackForm from '@/components/forms/TrackForm';
-import {getTrackById, Track, updateTrack, uploadTrackFile} from '@/lib/client/apiTracks';
+import {getTrackBySlug, Track, updateTrack, uploadTrackFile} from '@/lib/client/apiTracks';
 
 interface EditTrackFormContent {
     onSuccess?: () => void;
@@ -46,7 +46,7 @@ export default function EditTrackFormContent(
             }
 
             try {
-                const response = await getTrackById(slug);
+                const response = await getTrackBySlug(slug);
                 setTrackData(response.data);
             } catch (err) {
                 console.error(err);
@@ -99,7 +99,7 @@ export default function EditTrackFormContent(
     };
 
     if (!trackData) {
-        return <div className="p-10 text-center">Loading...</div>;
+        return <div className="p-10 text-center h-56"><Spinner/></div>;
     }
 
     return (
@@ -107,8 +107,10 @@ export default function EditTrackFormContent(
             error={error}
             loading={loading}
             onSubmit={onSubmit}
+            uploading={uploading}
             buttonText="Update Track"
             defaultValues={trackData}
+            setAudioFile={setAudioFile}
         />
     );
 }

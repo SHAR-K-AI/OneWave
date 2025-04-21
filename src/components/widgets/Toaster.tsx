@@ -34,21 +34,4 @@ const _Toaster = () => {
     );
 };
 
-/**
- *
- * @param type
- */
-const getBackgroundColor = (type: string) => {
-    switch (type) {
-        case 'success':
-            return '#E6FFFA';
-        case 'error':
-            return '#FFE6E6';
-        case 'info':
-            return '#E0F7FA';
-        default:
-            return '#FFFFFF';
-    }
-};
-
 export default _Toaster;

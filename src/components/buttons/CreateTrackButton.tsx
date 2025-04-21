@@ -26,6 +26,7 @@ export default function CreateTrackButton({className}: CreateTrackButtonProps) {
     };
 
     return (
+        /*TODO data-testid="create-track-button" - Button to create a new track*/
         <button
             onClick={createTrack}
             data-testid="create-track-button"

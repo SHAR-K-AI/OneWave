@@ -10,6 +10,16 @@ type Props = {
     register: UseFormRegisterReturn;
 };
 
+/**
+ *
+ * @param label
+ * @param placeholder
+ * @param type
+ * @param register
+ * @param dataTestId
+ * @param error
+ * @constructor
+ */
 export default function InputField(
     {
         label,

@@ -15,13 +15,13 @@ export interface Track {
 }
 
 export interface FiltersProps {
-    page?: number;
-    limit?: number;
-    sortBy?: string;
-    order?: string;
-    search?: string;
-    genre?: string;
-    artist?: string;
+    page?: number | string[] | undefined;
+    limit?: number | string[] | undefined;
+    sortBy?: string | string[] | undefined;
+    order?: string | string[] | undefined;
+    search?: string | string[] | undefined;
+    genre?: string | string[] | undefined;
+    artist?: string | string[] | undefined;
 }
 
 export const getTracks = async (
@@ -32,11 +32,12 @@ export const getTracks = async (
 
         if (page) queryParams.append('page', page.toString());
         if (limit) queryParams.append('limit', limit.toString());
-        if (sortBy) queryParams.append('sort', sortBy);
-        if (order) queryParams.append('order', order);
-        if (search) queryParams.append('search', search);
-        if (genre) queryParams.append('genre', genre);
-        if (artist) queryParams.append('artist', artist);
+        if (sortBy) queryParams.append('sort', Array.isArray(sortBy) ? sortBy.join(',') : sortBy);
+        if (order) queryParams.append('order', Array.isArray(order) ? order.join(',') : order);
+        if (search) queryParams.append('search', Array.isArray(search) ? search.join(',') : search);
+        if (genre) queryParams.append('genre', Array.isArray(genre) ? genre.join(',') : genre);
+        if (artist) queryParams.append('artist', Array.isArray(artist) ? artist.join(',') : artist);
+
 
         const queryString = queryParams.toString();
         return await apiClient.get(`/tracks?${queryString}`);
@@ -59,20 +60,6 @@ export const getTrackBySlug = async (slug: string): Promise<AxiosResponse<Track>
             toast.error(`Failed to load track by slug: ${error.message}`);
         } else {
             toast.error('Failed to load track by slug.');
-        }
-        throw error;
-    }
-};
-
-export const getTrackById = async (id: string): Promise<AxiosResponse<Track>> => {
-    try {
-        const response = await apiClient.get(`/tracks/${id}`);
-        return response;
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            toast.error(`Failed to load track by ID: ${error.message}`);
-        } else {
-            toast.error('Failed to load track by ID.');
         }
         throw error;
     }

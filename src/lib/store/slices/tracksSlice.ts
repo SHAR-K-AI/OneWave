@@ -1,17 +1,5 @@
-import {deleteMultipleTracks} from '@/lib/client/apiTracks';
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-
-export interface Track {
-    id: string;
-    title: string;
-    artist: string;
-    slug: string;
-    coverImage: string;
-    album: string;
-    genres: string[];
-    updatedAt: string;
-    audioUrl: string;
-}
+import { deleteMultipleTracks } from '@/lib/client/apiTracks';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 interface Meta {
     total: number;
@@ -23,24 +11,26 @@ interface Meta {
 interface TracksState {
     meta: Meta | null;
     loading: boolean;
+    dance: boolean;
     error: string | null;
     selectedTrackIds: string[];
+    selectionModeEnabled: boolean;
 }
 
 const initialState: TracksState = {
     meta: null,
     loading: false,
+    dance: false,
     error: null,
     selectedTrackIds: [],
+    selectionModeEnabled: false,
 };
-
 
 export const deleteSelectedTracksAsync = createAsyncThunk(
     'tracks/deleteSelectedTracksAsync',
-    async (trackIds: string[], {rejectWithValue}) => {
+    async (trackIds: string[], { rejectWithValue }) => {
         try {
             const response = await deleteMultipleTracks(trackIds);
-
             return response;
         } catch (error) {
             console.log(error);
@@ -61,27 +51,22 @@ const tracksSlice = createSlice({
                 state.selectedTrackIds.push(trackId);
             }
         },
-        deleteSelectedTracks(state) {
-            state.tracks = state.tracks.filter(track =>
-                !state.selectedTrackIds.includes(track.id)
-            );
-            state.selectedTrackIds = [];
-        },
-        updateSelectedTrack(state, action) {
-            const updatedTrack = action.payload;
-            const index = state.tracks.findIndex(track => track.id === updatedTrack.id);
-            if (index !== -1) {
-                state.tracks[index] = updatedTrack;
+        toggleSelectionMode(state) {
+            state.selectionModeEnabled = !state.selectionModeEnabled;
+            if (!state.selectionModeEnabled) {
+                state.selectedTrackIds = [];
             }
-        }
+        },
+        toggleDanceMode(state) {
+            state.dance = !state.dance;
+        },
     },
     extraReducers: (builder) => {
-        builder
-            .addCase(deleteSelectedTracksAsync.rejected, (state, action) => {
-                state.error = action.payload as string;
-            });
+        builder.addCase(deleteSelectedTracksAsync.rejected, (state, action) => {
+            state.error = action.payload as string;
+        });
     }
 });
 
-export const {toggleTrackSelection, deleteSelectedTracks, updateSelectedTrack} = tracksSlice.actions;
+export const { toggleTrackSelection, toggleSelectionMode, toggleDanceMode } = tracksSlice.actions;
 export default tracksSlice.reducer;

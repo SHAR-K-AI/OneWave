@@ -51,11 +51,16 @@ const DeleteTrackButton = ({trackId, className}: { trackId: string | undefined, 
     };
 
     return (
+        /*TODO Elements should indicate loading state via data-loading="true" attribute
+            Disabled elements during loading should use both disabled attribute and aria-disabled="true"*/
+        /*TODO data-testid="delete-track-{id}" - Delete button for a specific track*/
         <button
             disabled={isDeleting}
             onClick={openConfirmDeleteModal}
             aria-label="Delete Track"
             data-testid={`delete-track-${trackId}`}
+            data-loading={isDeleting ? "true" : "false"}
+            aria-disabled={isDeleting}
             className={classNames(className, "p-2 bg-red-600 text-white hover:bg-red-700 transition duration-300 cursor-pointer")}
         >
             <TrashIcon className="h-5 w-5"/>

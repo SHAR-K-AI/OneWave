@@ -1,6 +1,5 @@
 'use client';
 
-import AppImage from '@/components/AppImage';
 import React, { useEffect, useState } from 'react';
 
 const images = [
@@ -26,14 +25,16 @@ const SharkDanceImage = () => {
         return () => clearInterval(interval);
     }, []);
 
+     
     return (
-        <AppImage
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
             width={500}
             height={500}
             key={images[index]}
-            alt="Shark in action"
             src={images[index]}
-            className="max-h-full w-auto absolute top-0 right-50 mr-auto transition-transform duration-500 transform hover:scale-105 animate-fadeIn cursor-pointer m-auto"
+            alt="Shark in action"
+            className="w-64 h-64 object-cover rounded-full m-auto transition-all duration-300 group-hover:shadow-lg group-hover:rotate-4"
         />
     );
 };

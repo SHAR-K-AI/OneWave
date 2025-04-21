@@ -1,22 +1,22 @@
 'use client';
 
 import {useState} from 'react';
+import {useRouter} from 'next/navigation';
+import TrackForm from '@/components/forms/TrackForm';
 import {createTrack, Track, uploadTrackFile} from '@/lib/client/apiTracks';
 
-import classNames from "classnames";
-import {useRouter} from 'next/navigation';
-
-import AppImage from "@/components/AppImage";
-import TrackForm from '@/components/forms/TrackForm';
-import UploadButton from "@/components/buttons/UploadTrackFileButton";
-
 interface CreateTrackFormContent {
-    className?: string;
     onSuccess?: () => void;
     closeAfterSubmit?: boolean;
 }
 
-export default function CreateTrackFormContent({onSuccess, className, closeAfterSubmit}: CreateTrackFormContent) {
+/**
+ *
+ * @param onSuccess
+ * @param closeAfterSubmit
+ * @constructor
+ */
+export default function CreateTrackFormContent({onSuccess, closeAfterSubmit}: CreateTrackFormContent) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -52,6 +52,11 @@ export default function CreateTrackFormContent({onSuccess, className, closeAfter
         }
     };
 
+    /**
+     *
+     * @param trackId
+     * @param file
+     */
     const uploadAudio = async (trackId: string, file: File) => {
         setUploading(true);
         try {
@@ -69,7 +74,9 @@ export default function CreateTrackFormContent({onSuccess, className, closeAfter
             error={error}
             loading={loading}
             onSubmit={onSubmit}
+            uploading={uploading}
             buttonText="Create Track"
+            setAudioFile={setAudioFile}
         />
     );
 }
