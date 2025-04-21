@@ -34,7 +34,7 @@ const DeleteTrackButton = ({trackId, className}: { trackId: string | undefined, 
         setIsDeleting(true);
         try {
             await deleteTrack(trackId);
-            router.push('/tracks');
+            router.refresh();
         } catch (error) {
             console.error('Error deleting track:', error);
         } finally {
