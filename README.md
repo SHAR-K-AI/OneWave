@@ -3,7 +3,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 [Переглянути відео на YouTube](https://www.youtube.com/watch?v=PoDlpaFAbpE)
 
 ## Git HUB
-https://github.com/SHAR-K-AI/DeepWave
+[https://github.com/SHAR-K-AI/OneWave](https://github.com/SHAR-K-AI/OneWave)
 
 # Інструкція для запуску проекту
 
