@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import React, { useRef} from 'react';
+import React, {useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {PlayIcon, PauseIcon} from '@heroicons/react/20/solid';
 
@@ -28,7 +28,7 @@ const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
 
     const handlePlay = () => {
         if (currentTrackId && currentTrackId !== track.id) {
-            const previousAudio = document.getElementById(`audio-${currentTrackId}` ) as HTMLAudioElement;
+            const previousAudio = document.getElementById(`audio-${currentTrackId}`) as HTMLAudioElement;
 
             if (previousAudio) {
                 dispatch(pause());
@@ -60,7 +60,8 @@ const TrackPlayer: React.FC<TrackPlayerProps> = ({track, src}) => {
 
     const updateProgress = () => {
         if (audioRef.current) {
-            const progress = audioRef.current.currentTime / audioRef.current.duration;
+            console.log(audioRef.current.duration, "audioRef.current.duration")
+            const progress = audioRef.current.duration && audioRef.current.duration !== Infinity ? audioRef.current.currentTime / audioRef.current.duration : audioRef.current.currentTime / 100;
             const progressElement = document.querySelector(
                 `[data-testid="audio-progress-${track.id}"]`
             ) as HTMLInputElement;
