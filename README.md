@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 # One Wave
-[Переглянути відео на YouTube](https://www.youtube.com/watch?v=PoDlpaFAbpE)
+[Переглянути відео на YouTube](https://www.youtube.com/watch?v=9tUh9zQl_6A)
 
 ## Git HUB
 [https://github.com/SHAR-K-AI/OneWave](https://github.com/SHAR-K-AI/OneWave)
