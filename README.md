@@ -2,6 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 # One Wave
 [Переглянути відео на YouTube](https://www.youtube.com/watch?v=9tUh9zQl_6A)
 
+![One Wave](./public/images/readme-1.gif)
 ## Git HUB
 [https://github.com/SHAR-K-AI/OneWave](https://github.com/SHAR-K-AI/OneWave)
 
@@ -41,5 +42,3 @@ yarn go
 ```bash
 yarn goDev
 ```
-
-![One Wave](./public/images/readme-1.gif)
